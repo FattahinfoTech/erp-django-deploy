@@ -1,0 +1,97 @@
+<!-- templates/adjustment/product_minus.html -->
+{% extends 'base.html' %}
+
+{% block page_title %}Adjustment Product Minus{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Adjustment Product Minus</h4>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productMinusModal">
+        Create New
+    </button>
+</div>
+
+<!-- Product Minus Modal -->
+<div class="modal fade" id="productMinusModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Product Minus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Customer Name</label>
+                        {{ form.customer_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Entry Date</label>
+                        {{ form.entry_date }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product</label>
+                        {{ form.product }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Godown</label>
+                        {{ form.godown }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        {{ form.quantity }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Product Minus List Table -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Adjustment ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Godown</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for adjustment in adjustments %}
+                    <tr>
+                        <td>{{ adjustment.adjustment_id }}</td>
+                        <td>{{ adjustment.entry_date }}</td>
+                        <td>{{ adjustment.customer_name }}</td>
+                        <td>{{ adjustment.product }}</td>
+                        <td>{{ adjustment.godown }}</td>
+                        <td>{{ adjustment.quantity }}</td>
+                        <td>
+                            <span class="badge bg-{% if adjustment.status == 'Pending' %}warning{% elif adjustment.status == 'Approved' %}success{% else %}info{% endif %}">
+                                {{ adjustment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!-- templates/settings_app/cluster_zone.html -->
+{% extends 'base.html' %}
+
+{% block page_title %}Cluster & Zone{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Cluster & Zone List</h4>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clusterZoneModal">
+        Create New
+    </button>
+</div>
+
+<!-- Cluster Zone Modal -->
+<div class="modal fade" id="clusterZoneModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Cluster & Zone</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Cluster</label>
+                        {{ form.cluster }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Zone</label>
+                        {{ form.zone }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Cluster Zone List Table -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Cluster</th>
+                        <th>Zone</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cluster in clusters %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ cluster.cluster }}</td>
+                        <td>{{ cluster.zone }}</td>
+                        <td>
+                            <span class="badge bg-{% if cluster.status == 'Active' %}success{% elif cluster.status == 'Inactive' %}danger{% else %}warning{% endif %}">
+                                {{ cluster.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if clusters.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ clusters.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">Page {{ clusters.number }} of {{ clusters.paginator.num_pages }}</span>
+                </li>
+                
+                {% if clusters.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ clusters.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ clusters.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

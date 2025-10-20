@@ -1,0 +1,97 @@
+<!-- templates/warehouse/mother_to_lighter.html -->
+{% extends 'base.html' %}
+
+{% block page_title %}Mother Vessel To Lighter Vessel{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Mother Vessel To Lighter Vessel</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">LC Number</label>
+                        {{ form.lc_number }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Mother Vessel</label>
+                        {{ form.mother_vessel }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Lighter Vessel</label>
+                        {{ form.lighter_vessel }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Carrying Contractor</label>
+                        {{ form.carrying_contractor }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Product Info</label>
+                        {{ form.product_info }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        {{ form.quantity }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Arrival Date</label>
+                        {{ form.arrival_date }}
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>LC Number</th>
+                        <th>Mother Vessel</th>
+                        <th>Lighter Vessel</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Arrival Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transfer in transfers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ transfer.lc_number }}</td>
+                        <td>{{ transfer.mother_vessel }}</td>
+                        <td>{{ transfer.lighter_vessel }}</td>
+                        <td>{{ transfer.product_info }}</td>
+                        <td>{{ transfer.quantity }}</td>
+                        <td>{{ transfer.arrival_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

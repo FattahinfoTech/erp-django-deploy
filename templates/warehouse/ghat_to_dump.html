@@ -1,0 +1,97 @@
+<!-- templates/warehouse/ghat_to_dump.html -->
+{% extends 'base.html' %}
+
+{% block page_title %}Ghat To Dump{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Ghat To Dump</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">LC Number</label>
+                        {{ form.lc_number }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Godown</label>
+                        {{ form.godown }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Lighter Vessel</label>
+                        {{ form.lighter_vessel }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Product Info</label>
+                        {{ form.product_info }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Update Date</label>
+                        {{ form.update_date }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Dump</label>
+                        {{ form.dump }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label class="form-label">Note</label>
+                        {{ form.note }}
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>LC Number</th>
+                        <th>Godown</th>
+                        <th>Lighter Vessel</th>
+                        <th>Product</th>
+                        <th>Dump</th>
+                        <th>Update Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transfer in transfers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ transfer.lc_number }}</td>
+                        <td>{{ transfer.godown.name }}</td>
+                        <td>{{ transfer.lighter_vessel }}</td>
+                        <td>{{ transfer.product_info }}</td>
+                        <td>{{ transfer.dump.name }}</td>
+                        <td>{{ transfer.update_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

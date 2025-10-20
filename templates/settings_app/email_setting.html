@@ -1,0 +1,84 @@
+<!-- templates/settings_app/email_setting.html -->
+{% extends 'base.html' %}
+
+{% block page_title %}Email Setting{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Email Send List</h4>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#emailSettingModal">
+        Create New
+    </button>
+</div>
+
+<!-- Email Setting Modal -->
+<div class="modal fade" id="emailSettingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Email Send</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        {{ form.type }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Emails</label>
+                        {{ form.emails }}
+                        <div class="form-text">Enter comma separated email addresses</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Email Setting List Table -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Type</th>
+                        <th>Emails</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email_setting in email_settings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ email_setting.get_type_display }}</td>
+                        <td>{{ email_setting.emails }}</td>
+                        <td>
+                            <span class="badge bg-{% if email_setting.status == 'Active' %}success{% else %}danger{% endif %}">
+                                {{ email_setting.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
