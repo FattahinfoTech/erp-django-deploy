@@ -60,3 +60,7 @@ def sale_delivery(request):
 @login_required
 def sale_do_verify(request):
     return render(request, 'sales/sale_do_verify.html')
+
+@login_required
+def allotment_do_print(request):
+    return render(request, 'sales/allotment_do_print.html')

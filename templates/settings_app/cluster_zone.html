@@ -61,7 +61,7 @@
                 <tbody>
                     {% for cluster in clusters %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
+                        <td>{{ forloop.counter0|add:clusters.start_index }}</td>
                         <td>{{ cluster.cluster }}</td>
                         <td>{{ cluster.zone }}</td>
                         <td>
@@ -70,17 +70,83 @@
                             </span>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editClusterModal{{ cluster.id }}">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteClusterModal{{ cluster.id }}">
+                                Delete
+                            </button>
                         </td>
                     </tr>
+
+                    <!-- Edit Cluster Modal -->
+                    <div class="modal fade" id="editClusterModal{{ cluster.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Cluster & Zone</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="post" action="{% url 'cluster_zone' %}">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <input type="hidden" name="cluster_id" value="{{ cluster.id }}">
+                                        <div class="mb-3">
+                                            <label class="form-label">Cluster</label>
+                                            <input type="text" class="form-control" name="cluster" value="{{ cluster.cluster }}" placeholder="Cluster" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Zone</label>
+                                            <input type="text" class="form-control" name="zone" value="{{ cluster.zone }}" placeholder="Zone" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select class="form-control" name="status" required>
+                                                <option value="Active" {% if cluster.status == 'Active' %}selected{% endif %}>Active</option>
+                                                <option value="Inactive" {% if cluster.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                                <option value="Pending" {% if cluster.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Cluster Modal -->
+                    <div class="modal fade" id="deleteClusterModal{{ cluster.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete Cluster & Zone</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete "{{ cluster.cluster }} - {{ cluster.zone }}"?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form method="post" action="{% url 'cluster_zone' %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete_id" value="{{ cluster.id }}">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         
         <!-- Pagination -->
-        <nav aria-label="Page navigation">
+        {% if clusters.has_other_pages %}
+        <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
                 {% if clusters.has_previous %}
                 <li class="page-item">
@@ -91,9 +157,17 @@
                 </li>
                 {% endif %}
                 
-                <li class="page-item active">
-                    <span class="page-link">Page {{ clusters.number }} of {{ clusters.paginator.num_pages }}</span>
-                </li>
+                {% for num in clusters.paginator.page_range %}
+                    {% if clusters.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > clusters.number|add:'-3' and num < clusters.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
                 
                 {% if clusters.has_next %}
                 <li class="page-item">
@@ -105,6 +179,11 @@
                 {% endif %}
             </ul>
         </nav>
+        {% endif %}
+        
+        <div class="text-center text-muted mt-3">
+            Showing {{ clusters.start_index }} to {{ clusters.end_index }} of {{ clusters.paginator.count }} entries
+        </div>
     </div>
 </div>
 {% endblock %}

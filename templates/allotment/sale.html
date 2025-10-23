@@ -6,7 +6,7 @@
 {% block content %}
 <div class="card">
     <div class="card-header">
-        <h5>Allotment Sale</h5>
+        <h5 class="card-title mb-0">Allotment Sale</h5>
     </div>
     <div class="card-body">
         <form method="post" class="mb-4">
@@ -159,6 +159,7 @@
                         <th>Product</th>
                         <th>Month</th>
                         <th>Quantity</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -172,6 +173,11 @@
                         <td>{{ allotment.product_info }}</td>
                         <td>{{ allotment.month }}</td>
                         <td>{{ allotment.quantity_in_m_ton }}</td>
+                        <td>
+                            <span class="badge bg-{% if allotment.status == 'Pending' %}warning{% elif allotment.status == 'Approved' %}success{% else %}info{% endif %}">
+                                {{ allotment.status }}
+                            </span>
+                        </td>
                         <td>
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <a href="#" class="btn btn-sm btn-danger">Delete</a>

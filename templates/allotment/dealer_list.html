@@ -70,11 +70,24 @@
         <form class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Select District</label>
-                <input type="text" class="form-control" placeholder="Select District">
+                <select class="form-control">
+                    <option value="">Select District</option>
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Chittagong">Chittagong</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Barisal">Barisal</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Mymensingh">Mymensingh</option>
+                </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Select Thana</label>
-                <input type="text" class="form-control" placeholder="Select Thana">
+                <select class="form-control">
+                    <option value="">Select Thana</option>
+                    <!-- Thana options would be populated based on district selection -->
+                </select>
             </div>
             <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">Search</button>

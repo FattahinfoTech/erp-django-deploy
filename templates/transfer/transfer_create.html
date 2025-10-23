@@ -23,6 +23,10 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        {{ form.date }}
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">From</label>
                         {{ form.from_location }}
                     </div>
@@ -75,6 +79,10 @@
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <a href="#" class="btn btn-sm btn-danger">Delete</a>
                         </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No transfers found</td>
                     </tr>
                     {% endfor %}
                 </tbody>
